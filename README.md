@@ -101,7 +101,7 @@ sudo vi prometheus.yaml
   * Select Prometheus ждем кнопку "Import"
   
 > [!NOTE]
-> Всё должно выглядить как на скриншоте `https://github.com/TymkaTy/Docker/blob/main/grafana_stack_for_docker/Screenshot_Prometheus.png`
+> Всё должно выглядить как на скриншоте `https://github.com/AndreyFed/Docker/blob/main/grafana_stack_for_docker/Screenshot_Prometheus.png`
 
 Если не работает то переходим в 
 
