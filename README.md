@@ -1,5 +1,7 @@
 # 
 
+![image](https://github.com/piroxide/crazyton/blob/main/405283539-83cfa9c5-2a02-41db-bbd7-559ab54600e5.png)
+
 ## Быстрый старт
 
 Устанавливает утилиту wget на систему
