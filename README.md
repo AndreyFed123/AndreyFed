@@ -2,90 +2,162 @@
 
 ## Быстрый старт
 
-Перед началом установки, нужно установить Linux Oracle на VirtualBox, для этого выполним ряд действий:
+Устанавливает утилиту wget на систему
 
-Создаем виртуальную машину. В "образ ISO" на диске Student, в папке К-ИСП-49,выбираем папку Давыдов АА и там лежит документ.
+     sudo yum install wget
 
-Иметь образ Linux, добавить побольше ядер и опертивной паямяти.
+![image](https://github.com/piroxide/crazyton/blob/main/2.png)
 
-## **Далее переходим к установке docker с использованием grafana, вводим следующий набор команд:**
 
-1) `git clone https://github.com/skl256/grafana_stack_for_docker.git `
-   после вписания этой команды спрашивают об установлении пакета [N/y] вибираем y
+Скачиваем файл репозитория
 
-![image](https://github.com/user-attachments/assets/a094b1e1-fbae-4aff-ad44-a19c78b5d4e1)
+     sudo wget -P /etc/yum.repos.d/ https://download.docker.com/linux/centos/docker-ce.repo
 
-3) `cd grafana_stack_for_docker`
-   
-![image](https://github.com/user-attachments/assets/936bb14a-6479-4ea1-a7b2-bd6087586682)
- 
-3) `sudo mkdir -p /mnt/common_volume/swarm/grafana/config`
+![image](https://github.com/piroxide/crazyton/blob/main/3.png)
 
-![image](https://github.com/user-attachments/assets/e8c8078e-1cf6-4019-8136-2af990990800)
 
-4) `sudo mkdir -p /mnt/common_volume/grafana/{grafana-config,grafana-data,prometheus-data,loki-data,promtail-data} `
+Устанавливаем docker
 
-![image](https://github.com/user-attachments/assets/6a9bd0fc-2e22-4b64-a6d4-131036525bde)
+     sudo yum install docker-ce docker-ce-cli containerd.io
 
-5) `sudo chown -R $(id -u):$(id -g) {/mnt/common_volume/swarm/grafana/config,/mnt/common_volume/grafana} && \
-touch /mnt/common_volume/grafana/grafana-config/grafana.ini && \ `
+![image](https://github.com/piroxide/crazyton/blob/main/4.png)
 
-![image](https://github.com/user-attachments/assets/126e9fe3-bf9f-4a42-8884-1f38a7372c4c)
+Запускаем его и разрешаем автозапуск
 
-6) `touch /mnt/common_volume/grafana/grafana-config/grafana.ini `
+     sudo systemctl enable docker --now
 
-![image](https://github.com/user-attachments/assets/45042295-f2ab-40cd-a2ef-634106663b1b)
+![image](https://github.com/piroxide/crazyton/blob/main/5.png)
 
-8) `cp config/* /mnt/common_volume/swarm/grafana/config/` 
 
-![image](https://github.com/user-attachments/assets/8f05b63c-c981-411b-a943-91f91fac8e07)
 
-9) `mv grafana.yaml docker-compose.yaml `
+# Установка compose
 
-![image](https://github.com/user-attachments/assets/0b54a2eb-2a08-47f1-bb4f-b80e08d039a6)
+Для начала нужно убедиться в наличии пакета curl
 
-10)  `sudo docker compose up -d`
+     sudo yum install curl
 
-![image](https://github.com/user-attachments/assets/0c570ab8-a834-451d-a2a9-01df103301cc)
+![image](https://github.com/piroxide/crazyton/blob/main/6.png)
 
-![image](https://github.com/user-attachments/assets/39bf2dfa-9e11-4095-8283-0710cab17667)
 
-**Устанавливаем последнею версию и утилитю docker-compose**
 
-1) `sudo yum install curl`
+Объявление переменной COMVER, полученной в результате curl запроса, хранящей в себе номер последней
+версии Docker Compose
 
-![image](https://github.com/user-attachments/assets/eb9a4a4f-72aa-4a9d-98a2-e95d0a903aa3)
+     COMVER=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
 
-2) `COMVER=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)`
+Теперь скачиваем скрипт docker-compose последней версии, используя объявленную ранее переменную и помещаем его в каталог /usr/bin
 
-![image](https://github.com/user-attachments/assets/4be240f5-bd9f-4cd8-b977-f191e75b9062)
+     sudo curl -L "https://github.com/docker/compose/releases/download/$COMVER/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
 
-3) `curl -L "https://github.com/docker/compose/releases/download/$COMVER/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose`
+![image](https://github.com/piroxide/crazyton/blob/main/7.png)
 
-![image](https://github.com/user-attachments/assets/b0162140-ec0b-4cd6-b76f-e6955e71744c)
 
-4) `sudo chmod +x /usr/bin/docker-compose`
 
-5) `sudo docker-compose --version`
+Предоставление прав на выполнение файла docker-compose
 
-![image](https://github.com/user-attachments/assets/0b0f5862-e030-4dc3-bdc6-e4e6d5f8e5b1)
+     sudo chmod +x /usr/bin/docker-compose
 
-## **Установка и настройка Docker**
+Проверка установленной версии Docker Compose
 
-1) `sudo wget -P /etc/yum.repos.d/ https://download.docker.com/linux/centos/docker-ce.repo
-`
+     sudo docker-compose --version
 
-![image](https://github.com/user-attachments/assets/f8041f63-d355-46f9-8208-6e40a871597d)
+![image](https://github.com/piroxide/crazyton/blob/main/8.png)
 
-2) ` sudo yum install docker-ce docker-ce`
 
-![image](https://github.com/user-attachments/assets/a51b6314-c1cf-4dc2-8a11-fa2f73299701)
+# Делаем grafana
 
-![image](https://github.com/user-attachments/assets/c8756496-b0e2-47a1-b168-cd00747e5bde)
+Установка git
 
-3) `sudo systemctl enable docker --now`
+     sudo yum install git
 
-4) `sudo docker compose up -d`
+![image](https://github.com/piroxide/crazyton/blob/main/9.png)
+
+
+
+Этот код скачивает содержимое репозитория skl256/grafana_stack_for_docker
+
+     sudo git clone https://github.com/skl256/grafana_stack_for_docker.git
+
+![image](https://github.com/piroxide/crazyton/blob/main/10.png)
+
+
+
+Заходит в папку - cd
+
+     cd grafana_stack_for_docker
+
+cd .. - возвращает в папку выше
+
+
+(После этого можно вставлять готовый docker-compose)
+
+Cоздаем папки двумя разными способами
+
+     sudo mkdir -p /mnt/common_volume/swarm/grafana/config
+
+     sudo mkdir -p /mnt/common_volume/grafana/{grafana-config,grafana-data,prometheus-data,loki-data,promtail-data}
+
+Выдаем права
+
+     sudo chown -R $(id -u):$(id -g) {/mnt/common_volume/swarm/grafana/config,/mnt/common_volume/grafana}
+
+Создаем файл
+
+     sudo touch /mnt/common_volume/grafana/grafana-config/grafana.ini
+
+Копирование файлов
+
+     sudo cp config/* /mnt/common_volume/swarm/grafana/config/
+
+Переименовывание файла
+
+     sudo mv grafana.yaml docker-compose.yaml
+
+![image](https://github.com/piroxide/crazyton/blob/main/11.png)
+
+
+Собрать докер (нужно запускать из папки где docker-compose.yaml)
+
+     sudo docker compose up -d
+
+Опустить докер - sudo docker compose stop
+
+![image](https://github.com/piroxide/crazyton/blob/main/12.png)
+
+
+
+
+# Начинаем чистку файлов
+
+Команда открывает файл docker-compose.yaml в текстовом редакторе vi с правами суперпользователя
+
+     sudo vi docker-compose.yaml
+
+Что-бы что-то изменить в тесковом редакторе нужно нажать insert на клавиатуре
+
+Затем в docker-compose нужно вставить node-exporter и удалить ненужные файлы (но у нас уже вставлен готовый докер)
+
+![image](https://github.com/user-attachments/assets/14df36d8-22eb-42ea-b544-b1269c0a0393)
+
+выйти не сохраняясь из vim - esc -> :q!
+
+выйти сохраняясь из vim - esc -> :wq!
+
+Заходим в другую папку 
+
+     sudo cd /mnt/common_volume/swarm/grafana/config
+
+Открываем файл prometheus.yaml в текстовом редакторе vi с правами суперпользователя
+
+     sudo vi prometheus.yaml
+
+![image](https://github.com/piroxide/crazyton/blob/main/13.png)
+
+
+
+Далее нужно исправить targets: на exporter:9100
+
+![image](https://github.com/user-attachments/assets/d6dc7b39-175e-44e1-8fe3-e244cd85c825)
 
 * Для docker compose
   
